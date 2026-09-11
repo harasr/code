@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<meta name="theme-color" content="#0a0c0f">
+<title>Tung Tung — Premium</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@500;600;700&family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="data/style.css">
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+<body>
+<main id="shell">
+<canvas id="game"></canvas>
+<div id="ui">
+  <section id="intro">
+    <div class="intro-bg" id="ibg"></div>
+    <div class="intro-veil"></div>
+    <div class="intro-sun"></div>
+    <div class="intro-copy">
+      <p class="intro-kicker">Premium Edition</p>
+      <h1 class="intro-title"><span>T</span><span>U</span><span>N</span><span>G</span><span class="sp"> </span><span>T</span><span>U</span><span>N</span><span>G</span></h1>
+      <p class="intro-tag">made by thanh · tiktok:_thanhwi</p>
+    </div>
+    <button type="button" id="skip">Skip</button>
+  </section>
+  <section id="menu">
+    <div class="menu-brand">
+      <p class="menu-kicker">made by thanh · tiktok:_thanhwi</p>
+      <h1 class="menu-title">Tung Tung</h1>
+    </div>
+    <div class="menu-actions">
+      <button type="button" class="btn btn-fly" id="fly">✦ Fly</button>
+      <div class="menu-row">
+        <button type="button" class="btn btn-icon" id="btn-lb" title="BXH">🏆</button>
+        <button type="button" class="btn btn-icon" id="shop-toggle" title="Shop Skin">🛒</button>
+      </div>
+            <div class="auth-box" id="auth-box">
+        <div class="auth-user" id="auth-user">
+          <img id="auth-avatar" alt="" referrerpolicy="no-referrer">
+          <span id="auth-name">User</span>
+          <button type="button" id="btn-logout">Thoát</button>
+        </div>
+        <div id="auth-login">
+          <div id="g_id_button_container" class="g-id-wrap"></div>
+          <div class="auth-divider"><span>hoặc</span></div>
+          <input type="text" id="acc-user" maxlength="16" placeholder="Tên tài khoản" autocomplete="username" spellcheck="false" style="width:100%;min-height:34px;padding:0 10px;border-radius:10px;border:1px solid var(--glass-border);background:rgba(255,255,255,.05);color:var(--paper);font:600 12px/1 var(--fs);margin-bottom:6px;outline:none">
+          <input type="password" id="acc-pass" maxlength="32" placeholder="Mật khẩu" autocomplete="current-password" style="width:100%;min-height:34px;padding:0 10px;border-radius:10px;border:1px solid var(--glass-border);background:rgba(255,255,255,.05);color:var(--paper);font:600 12px/1 var(--fs);margin-bottom:6px;outline:none">
+          <div style="display:flex;gap:6px">
+            <button type="button" class="btn-auth" id="btn-login-local" style="flex:1;min-height:34px;font-size:11px">Đăng nhập</button>
+            <button type="button" class="btn-auth" id="btn-register-local" style="flex:1;min-height:34px;font-size:11px;background:rgba(212,175,55,.15);border-color:rgba(212,175,55,.35)">Tạo TK</button>
+          </div>
+        </div>
+        <div class="auth-err" id="auth-err"></div>
+      </div>
+      <p class="menu-best">Best <strong id="best-m">0</strong> · Ví <strong id="total-pts-top">0</strong></p>
+      <div class="prog-card">
+        <div class="prog-row"><span>Ví điểm</span><strong id="total-pts">0</strong></div>
+        <div class="prog-row"><span>Skin</span><strong id="skin-name">Classic</strong></div>
+        <div class="prog-row"><span>Điểm BXH</span><strong id="score-mul">1x</strong></div>
+        <div class="prog-row"><span>Tốc độ</span><strong id="spd-mul">1x</strong></div>
+        <div class="prog-row"><span>Thẻ đổi tên</span><strong id="rename-tokens">3</strong></div>
+        <div class="rename-row">
+          <input type="text" id="rename-input" maxlength="16" placeholder="Đổi tên hiển thị" autocomplete="off" spellcheck="false">
+          <button type="button" class="shop-btn shop-equip" id="btn-rename">Đổi</button>
+        </div>
+        <div class="prog-next" id="next-skin">Bấm 🛒 để mở Shop</div>
+      </div>
+      <!-- hidden hosts for refreshLB -->
+      <div class="lb-wrap" style="display:none" aria-hidden="true">
+        <small id="srv-status"></small>
+        <strong id="plays-m">0</strong>
+        <div class="lb-podium" id="podium-menu"></div>
+        <ul class="lb-list" id="lb-menu"></ul>
+      </div>
+      <div class="shop-wrap shop-popup" id="shop-wrap" style="display:none">
+        <div class="shop-head">
+          <span class="shop-title">🛒 Shop Skin</span>
+          <button type="button" class="shop-toggle" id="shop-close">✕</button>
+        </div>
+        <div class="shop-list" id="shop-list" style="display:flex"></div>
+      </div>
+    </div>
+    <button type="button" class="icon corner" id="mute-m" aria-label="Mute">🔊</button>
+  </section>
+  <div id="hud">
+    <div class="hud-season" id="season-label">🌸 Xuân</div>
+    <div class="hud-score" id="score">0</div>
+    <div class="hud-shield" id="shield-hud" style="display:none">🛡️ 0</div>
+    <div class="hud-tools">
+      <button type="button" class="icon icon-kill" id="kill" aria-label="Chết ngay" title="Chết ngay">💀</button>
+      <button type="button" class="icon" id="mute-h" aria-label="Mute">🔊</button>
+      <button type="button" class="icon" id="pause" aria-label="Pause">Ⅱ</button>
+    </div>
+  </div>
+  <div class="season-toast" id="season-toast"></div>
+  <section id="paused" class="overlay">
+    <div class="panel">
+      <p class="panel-k">Hold</p>
+      <h2 class="panel-t">Paused</h2>
+      <button type="button" class="btn btn-main" id="resume">Resume</button>
+      <button type="button" class="btn btn-ghost" id="to-menu-p">Menu</button>
+    </div>
+  </section>
+  <section id="over" class="overlay">
+    <div class="panel panel-over">
+      <p class="panel-k">Flight ended</p>
+      <h2 class="panel-t">Grounded</h2>
+      <div class="stats">
+        <div><span>Score</span><strong id="fs">0</strong></div>
+        <div><span>Best</span><strong id="fb">0</strong></div>
+      </div>
+      <p class="newbest" id="nb">✦ New best</p>
+      <div class="name-row">
+        <input type="text" id="player-name" maxlength="16" placeholder="Tên của bạn" autocomplete="off" spellcheck="false">
+      </div>
+      <div class="lb-card">
+        <div class="lb-head">
+          <span class="lb-title">BXH Top 10</span>
+          <span class="lb-plays">Lượt <strong id="plays-o">0</strong></span>
+        </div>
+        <div class="lb-podium" id="podium-over"></div>
+        <ul class="lb-list" id="lb-over"></ul>
+      </div>
+      <button type="button" class="btn btn-main" id="retry">Fly again</button>
+      <button type="button" class="btn btn-ghost" id="btn-lb-o">🏆 Xem BXH</button>
+      <button type="button" class="btn btn-ghost" id="to-menu-o">Menu</button>
+    </div>
+  </section>
+  <section id="lb-view" class="overlay">
+    <div class="panel panel-lb">
+      <p class="panel-k">Leaderboard</p>
+      <h2 class="panel-t">BXH Top 10</h2>
+      <p class="lb-view-plays">Lượt chơi <strong id="plays-v">0</strong> <small id="srv-status-v"></small></p>
+      <div class="lb-podium" id="podium-view"></div>
+      <ul class="lb-list lb-list-view" id="lb-view-list"></ul>
+      <button type="button" class="btn btn-main" id="lb-close">Đóng</button>
+    </div>
+  </section>
+</div>
+</main>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-database-compat.js"></script>
+<script src="data/game.js"></script>
+</body>
+</html>

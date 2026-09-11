@@ -1,0 +1,33 @@
+{
+  "rules": {
+    "tungtung": {
+      "plays": {
+        ".read": true,
+        // Bất kỳ phiên đã đăng nhập Firebase nào cũng ghi được — kể cả ẩn danh
+        // (khách/tài khoản local), miễn là có signInAnonymously() thành công.
+        ".write": "auth != null"
+      },
+      "board": {
+        ".read": true,
+        ".indexOn": ["score", "uid"],
+        "$entryId": {
+          // Tạo/sửa: uid trong dữ liệu gửi lên phải trùng auth.uid của phiên hiện tại
+          // (ẩn danh hoặc đã link Google đều dùng chung 1 auth.uid ổn định).
+          // Xoá: khi newData không tồn tại, phải kiểm tra dữ liệu CŨ (data) thay vì
+          // newData (luôn null lúc xoá) — nếu không nhánh xoá sẽ luôn bị từ chối.
+          ".write": "auth != null && ((newData.exists() && newData.child('uid').val() === auth.uid) || (!newData.exists() && data.exists() && data.child('uid').val() === auth.uid))",
+          ".validate": "newData.hasChildren(['name', 'score', 'uid', 'at']) && newData.child('name').isString() && newData.child('name').val().length > 0 && newData.child('name').val().length <= 16 && newData.child('score').isNumber() && newData.child('score').val() >= 0 && newData.child('score').val() <= 999999 && newData.child('uid').isString() && newData.child('uid').val() === auth.uid && newData.child('at').isNumber()"
+        }
+      }
+    },
+    "studyhours": {
+      "users": {
+        ".read": true,
+        "$uid": {
+          ".write": "auth != null && auth.uid === $uid",
+          ".validate": "newData.hasChildren(['uid', 'name', 'totalHours']) && newData.child('uid').val() === $uid && newData.child('totalHours').isNumber() && newData.child('totalHours').val() >= 0"
+        }
+      }
+    }
+  }
+}
